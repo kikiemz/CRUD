@@ -1,5 +1,33 @@
 from . import Operasi
 
+def delete_console():
+    read_console()
+    while True:
+        print("Silahkan pilih nomor buku yang akan di hapus")
+        no_buku = int(input("Nomor Buku: "))
+        data_buku = Operasi.read(index=no_buku)
+
+        if data_buku:
+            data_break = data_buku.split(',')
+            pk = data_break[0]
+            date_add = data_break[1]
+            penulis = data_break[2]
+            judul = data_break[3]
+            tahun = data_break[4][:-1]
+
+            print("WARNING !!!\nDATA INI AKAN TERHAPUS   ")
+            print(f"1. Judul\t: {judul:.40}")
+            print(f"2. Penulis\t: {penulis:.40}")
+            print(f"3. Tahun\t: {tahun:4}")
+
+            lanjut = input("Apkah anda benar ingin menghapus? (y/n)\t: ")
+            if lanjut == "y":
+                Operasi.delete(no_buku)
+                break
+        else:
+            print("nomor tidak valid, silahkan masukan lagi")
+    
+
 def update_console():
     read_console()
     while True:
@@ -81,8 +109,8 @@ def read_console():
     data_file = Operasi.read()
 
     index = "No"
-    penulis = "Penulis"
     judul = "Judul"
+    penulis = "Penulis"
     tahun = "Tahun"
 
     # Header
@@ -91,7 +119,7 @@ def read_console():
     print("\n"+"-"*100)
 
     # Data
-    for index,data in enumerate(data_file):
+    for index,data in enumerate(data_file, start=1):
         data_pisah = data.split(",")
         pk = data_pisah[0]
         data_add = data_pisah[1]
