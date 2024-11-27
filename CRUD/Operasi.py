@@ -1,6 +1,27 @@
 import time
 from . import Database
 from .Utils import kocok
+import os
+
+def delete(no_buku):
+    try:
+        with open(Database.DB_NAME,'r') as file:
+            counter = 0
+            while True:
+                konten = file.readlines()
+                if len(konten) == 0:
+                    break
+                elif counter == no_buku - 1:
+                    pass
+                else:
+                    with open("data_temp.txt",'a',encoding="utf-8") as temp_file:
+                        temp_file.write(konten)
+                counter += 1
+    except:
+        print("Data Tidak Terhapus")
+    print('Data Berhasil Terhapus')
+    os.rename("data_temp.txt",Database.DB_NAME)
+
 
 def update(no_buku,pk,date_add,tahun,judul,penulis):
     data = Database.TEMPLATE.copy()
@@ -12,6 +33,7 @@ def update(no_buku,pk,date_add,tahun,judul,penulis):
     data["tahun"] = str(tahun)
 
     data_str = f"{data['pk']},{data['date_add']},{data['penulis']},{data['judul']},{data['tahun']}\n"
+    
     panjang_data = len(data_str)
 
     try: 
@@ -74,7 +96,7 @@ def read(**kwargs):
             konten = file.readlines()
             jumlah_konten = len(konten)
             if "index" in kwargs:
-                index_buku = kwargs["index"]
+                index_buku = kwargs["index"]-1
                 if index_buku < 0 or index_buku > jumlah_konten:
                     return False
                 else:
